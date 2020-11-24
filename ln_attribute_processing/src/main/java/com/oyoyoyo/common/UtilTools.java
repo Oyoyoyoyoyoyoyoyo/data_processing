@@ -1,11 +1,15 @@
 package com.oyoyoyo.common;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.geotools.data.DataUtilities;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -89,5 +93,23 @@ public class UtilTools {
         //degree = meter / (2 * Math.PI * 6371004) * 360
         double degree = length / (2 * Math.PI * 6371004) * 360;
         return degree;
+    }
+
+    /**
+     * 导出GeoJSON数据
+     *
+     * @param features
+     */
+    public static void outputGeoJSON(JSONArray features, String outputPath) throws Exception {
+        StringBuffer geoJSONSb = new StringBuffer();
+        geoJSONSb.append("{\"type\": \"FeatureCollection\",\"features\": ");
+        geoJSONSb.append(Arrays.toString(features.toArray()));
+        geoJSONSb.append("}");
+        File outputfile = new File(outputPath);
+        FileOutputStream fileOutputStream = new FileOutputStream(outputfile);
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "utf-8");
+        outputStreamWriter.write(String.valueOf(geoJSONSb));
+        outputStreamWriter.flush();
+        outputStreamWriter.close();
     }
 }

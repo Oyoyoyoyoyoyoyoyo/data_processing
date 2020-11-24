@@ -4,6 +4,7 @@ package com.oyoyoyo.mindistance;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.oyoyoyo.common.GeoUtils;
+import com.oyoyoyo.common.UtilTools;
 import com.oyoyoyo.entity.LnBaseData;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureWriter;
@@ -31,19 +32,19 @@ import javax.swing.*;
 /**
  * 两属性间最短距离属性匹配
  */
+
 public class MindistanceCompute {
     private static final Logger logger = LoggerFactory.getLogger(MindistanceCompute.class);
-
     public static void main(String[] args) throws Exception {
         long startTime = System.currentTimeMillis();
         String outputPath = null;
-        JOptionPane.showMessageDialog(null, "请选择需要处理的geojson文件");
+        JOptionPane.showMessageDialog(null, "请选择待处理的geojson文件");
         //读取geojson文件
         File mainFile = JFileDataStoreChooser.showOpenFile("geojson", null);
         // 输出文件为同路径下同文件名
         outputPath = mainFile.getAbsolutePath().replace(".geojson", "_result_.geojson");
         JSONArray mainData = readGeoJSON(mainFile);
-        JOptionPane.showMessageDialog(null, "请选择全量基础数据的geojson文件");
+        JOptionPane.showMessageDialog(null, "请选择基础数据的geojson文件");
         File baseFile = JFileDataStoreChooser.showOpenFile("geojson", null);
         JSONArray baseData = readGeoJSON(baseFile);
         computeMinDistance(mainData, baseData, outputPath);
@@ -85,17 +86,13 @@ public class MindistanceCompute {
      * @param baseData
      */
     public static void computeMinDistance(JSONArray mainData, JSONArray baseData, String outputPath) throws Exception {
-        //long startTime = System.currentTimeMillis();
         List<LnBaseData> lengthList = new ArrayList<LnBaseData>();
         double length;
         JSONArray features = new JSONArray();
         int mainTotal=mainData.size();
         for (int i = 0; i < mainData.size(); i++) {
-            //logger.info("处理进度："+5/mainTotal+"%");
-
+            logger.info("处理进度："+((float)i/mainTotal)*100+"%");
             JSONObject mainDataOroperties = (JSONObject) mainData.getJSONObject(i).get("properties");
-
-            //Object feature = mainData.getJSONObject(i).put("minDistance", "test");
             for (int j = 0; j < baseData.size(); j++) {
                 JSONObject baseDataOroperties = (JSONObject) baseData.getJSONObject(j).get("properties");
                 GeoUtils geoUtils = new GeoUtils();
@@ -117,24 +114,8 @@ public class MindistanceCompute {
 
             mainData.getJSONObject(i).put("properties", mainDataOroperties);
         }
-        outputGeoJSON(mainData, outputPath);
+        UtilTools.outputGeoJSON(mainData, outputPath);
     }
 
-    /**
-     * 导出GeoJSON数据
-     *
-     * @param features
-     */
-    public static void outputGeoJSON(JSONArray features, String outputPath) throws Exception {
-        StringBuffer geoJSONSb = new StringBuffer();
-        geoJSONSb.append("{\"type\": \"FeatureCollection\",\"features\": ");
-        geoJSONSb.append(Arrays.toString(features.toArray()));
-        geoJSONSb.append("}");
-        File outputfile = new File(outputPath);
-        FileOutputStream fileOutputStream = new FileOutputStream(outputfile);
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "utf-8");
-        outputStreamWriter.write(String.valueOf(geoJSONSb));
-        outputStreamWriter.flush();
-        outputStreamWriter.close();
-    }
+
 }

@@ -8,6 +8,9 @@ class LnAttributeProcessingApplicationTests {
 
     @Test
     void contextLoads() {
+        double i=5;
+        double k=100;
+        System.out.println("i/k = " + i/k);
     }
 
 }
