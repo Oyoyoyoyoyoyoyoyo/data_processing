@@ -2,18 +2,15 @@ package com.oyoyoyo;
 
 import com.alibaba.fastjson.JSONArray;
 import com.oyoyoyo.common.UtilTools;
-import com.oyoyoyo.mindistance.BufferCompute;
-import com.oyoyoyo.mindistance.MindistanceCompute;
+import com.oyoyoyo.compute.BufferCompute;
+import com.oyoyoyo.compute.MindistanceCompute;
 import org.geotools.swing.data.JFileDataStoreChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.swing.*;
-import java.io.BufferedReader;
 import java.io.File;
 
 @SpringBootApplication
@@ -23,7 +20,6 @@ public class LnAttributeProcessingApplication {
     public static void main(String[] args) throws Exception {
         SpringApplicationBuilder builder = new SpringApplicationBuilder(LnAttributeProcessingApplication.class);
         builder.headless(false).run(args);
-        //SpringApplication.run(LnAttributeProcessingApplication.class, args);
         int type;
         long startTime = System.currentTimeMillis();
         String outputPath = null;
@@ -33,11 +29,11 @@ public class LnAttributeProcessingApplication {
             return;
         }
         //读取文件
-        JOptionPane.showMessageDialog(null, "请选择待处理的geojson文件");
+        JOptionPane.showMessageDialog(null, "请选择待处理数据(geojson)");
         File mainFile = JFileDataStoreChooser.showOpenFile("geojson", null);
         outputPath = mainFile.getAbsolutePath().replace(".geojson", "_result_.geojson");
         JSONArray mainData = UtilTools.readGeoJSON(mainFile);
-        JOptionPane.showMessageDialog(null, "请选择基础数据的geojson文件");
+        JOptionPane.showMessageDialog(null, "请选择基础数据(geojson)");
         File baseFile = JFileDataStoreChooser.showOpenFile("geojson", null);
         JSONArray baseData = UtilTools.readGeoJSON(baseFile);
 

@@ -2,10 +2,13 @@ package com.oyoyoyo.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.oyoyoyo.compute.MindistanceCompute;
 import org.geotools.data.DataUtilities;
 import org.geotools.geojson.geom.GeometryJSON;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
@@ -14,6 +17,7 @@ import java.util.*;
  * 常用工具方法类
  */
 public class UtilTools {
+    private static final Logger logger = LoggerFactory.getLogger(MindistanceCompute.class);
     public static final double DISTANCE = 0.000008983153;
     public static Scanner scan = null;
 
@@ -158,5 +162,22 @@ public class UtilTools {
      */
     public static void closeScanner() {
         scan.close();
+    }
+
+    /**
+     * 判断经纬度是否异常
+     *
+     * @param lon
+     * @param lat
+     */
+    public static boolean judgeCoord(String lon, String lat) {
+        if (Float.parseFloat(lon) < 0
+                || Float.parseFloat(lon) > 180
+                || Float.parseFloat(lat) < 0
+                || Float.parseFloat(lat) > 90) {
+            logger.error("经纬度异常");
+            return false;
+        }
+        return true;
     }
 }
