@@ -42,14 +42,14 @@ public class LnAttributeProcessingApplication {
             MindistanceCompute.computeMinDistance(mainData, baseData, outputPath);
             long endTime = System.currentTimeMillis();
             logger.info("success");
-            logger.info("当前程序耗时：" + (endTime - startTime) + "ms");
+            logger.info("当前程序耗时：" + (endTime - startTime)/1000 + "s");
         } else if (type == 2) {
             //相交分析
             BufferCompute.computeBuffer(mainData, baseData, outputPath);
             UtilTools.closeScanner();
             long endTime = System.currentTimeMillis();
             logger.info("success");
-            logger.info("当前程序耗时：" + (endTime - startTime) + "ms");
+            logger.info("当前程序耗时：" + (endTime - startTime)/1000 + "s");
         }
     }
 
