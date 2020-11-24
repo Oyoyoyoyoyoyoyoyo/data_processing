@@ -24,6 +24,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,23 +36,6 @@ import javax.swing.*;
 
 public class MindistanceCompute {
     private static final Logger logger = LoggerFactory.getLogger(MindistanceCompute.class);
-    public static void main(String[] args) throws Exception {
-        long startTime = System.currentTimeMillis();
-        String outputPath = null;
-        JOptionPane.showMessageDialog(null, "请选择待处理的geojson文件");
-        //读取geojson文件
-        File mainFile = JFileDataStoreChooser.showOpenFile("geojson", null);
-        // 输出文件为同路径下同文件名
-        outputPath = mainFile.getAbsolutePath().replace(".geojson", "_result_.geojson");
-        JSONArray mainData = UtilTools.readGeoJSON(mainFile);
-        JOptionPane.showMessageDialog(null, "请选择基础数据的geojson文件");
-        File baseFile = JFileDataStoreChooser.showOpenFile("geojson", null);
-        JSONArray baseData = UtilTools.readGeoJSON(baseFile);
-        computeMinDistance(mainData, baseData, outputPath);
-        long endTime = System.currentTimeMillis();
-        logger.info("success");
-        logger.info("当前程序耗时：" + (endTime - startTime) + "ms");
-    }
 
     /**
      * 计算最短距离
@@ -63,9 +47,9 @@ public class MindistanceCompute {
         List<LnBaseData> lengthList = new ArrayList<LnBaseData>();
         double length;
         JSONArray features = new JSONArray();
-        int mainTotal=mainData.size();
+        int mainTotal = mainData.size();
         for (int i = 0; i < mainData.size(); i++) {
-            logger.info("处理进度："+((float)i/mainTotal)*100+"%");
+            logger.info("处理进度：" + ((float) i / mainTotal) * 100 + "%");
             JSONObject mainDataOroperties = (JSONObject) mainData.getJSONObject(i).get("properties");
             for (int j = 0; j < baseData.size(); j++) {
                 JSONObject baseDataOroperties = (JSONObject) baseData.getJSONObject(j).get("properties");

@@ -8,16 +8,14 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 常用工具方法类
  */
 public class UtilTools {
     public static final double DISTANCE = 0.000008983153;
+    public static Scanner scan = null;
 
     /**
      * 获取SimpleFeatureType(读取geojson/wkt数据用)
@@ -138,5 +136,27 @@ public class UtilTools {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 获取控制台输入内容
+     *
+     * @return
+     */
+    public static String readInputLine(String msg) throws Exception {
+        String str = "";
+        scan = new Scanner(System.in);
+        System.out.println(msg);
+        // 判断是否还有输入
+        str = scan.nextLine();
+        System.out.println(str);
+        return str;
+    }
+
+    /**
+     * 关闭控制台输入
+     */
+    public static void closeScanner() {
+        scan.close();
     }
 }
