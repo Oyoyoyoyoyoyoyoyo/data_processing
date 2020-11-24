@@ -3,14 +3,15 @@ package com.oyoyoyo.common;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.geotools.data.DataUtilities;
+import org.geotools.geojson.geom.GeometryJSON;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 常用工具方法类
@@ -111,5 +112,31 @@ public class UtilTools {
         outputStreamWriter.write(String.valueOf(geoJSONSb));
         outputStreamWriter.flush();
         outputStreamWriter.close();
+    }
+
+    /**
+     * 读取GeoJSON数据
+     */
+    public static JSONArray readGeoJSON(File file) {
+        Map map = new HashMap();
+        GeometryJSON gjson = new GeometryJSON();
+        try {
+            //读取文件存入sb
+            Reader reader = new InputStreamReader(new FileInputStream(file), "utf-8");
+            int ch = 0;
+            StringBuffer sb = new StringBuffer();
+            while ((ch = reader.read()) != -1) {
+                sb.append((char) ch);
+            }
+            reader.close();
+            sb.toString();
+            //将geojson数据转json对象
+            JSONObject json = JSONObject.parseObject(sb.toString());
+            JSONArray features = (JSONArray) json.get("features");
+            return features;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

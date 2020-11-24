@@ -43,40 +43,14 @@ public class MindistanceCompute {
         File mainFile = JFileDataStoreChooser.showOpenFile("geojson", null);
         // 输出文件为同路径下同文件名
         outputPath = mainFile.getAbsolutePath().replace(".geojson", "_result_.geojson");
-        JSONArray mainData = readGeoJSON(mainFile);
+        JSONArray mainData = UtilTools.readGeoJSON(mainFile);
         JOptionPane.showMessageDialog(null, "请选择基础数据的geojson文件");
         File baseFile = JFileDataStoreChooser.showOpenFile("geojson", null);
-        JSONArray baseData = readGeoJSON(baseFile);
+        JSONArray baseData = UtilTools.readGeoJSON(baseFile);
         computeMinDistance(mainData, baseData, outputPath);
         long endTime = System.currentTimeMillis();
         logger.info("success");
         logger.info("当前程序耗时：" + (endTime - startTime) + "ms");
-    }
-
-    /**
-     * 读取GeoJSON数据
-     */
-    public static JSONArray readGeoJSON(File file) {
-        Map map = new HashMap();
-        GeometryJSON gjson = new GeometryJSON();
-        try {
-            //读取文件存入sb
-            Reader reader = new InputStreamReader(new FileInputStream(file), "utf-8");
-            int ch = 0;
-            StringBuffer sb = new StringBuffer();
-            while ((ch = reader.read()) != -1) {
-                sb.append((char) ch);
-            }
-            reader.close();
-            sb.toString();
-            //将geojson数据转json对象
-            JSONObject json = JSONObject.parseObject(sb.toString());
-            JSONArray features = (JSONArray) json.get("features");
-            return features;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /**
